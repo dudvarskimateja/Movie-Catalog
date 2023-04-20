@@ -17,6 +17,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private List<Movie> mMovies;
 
+
     public MovieAdapter(MainActivity mainActivity, List<Movie> movies) {
         mMovies = movies;
     }

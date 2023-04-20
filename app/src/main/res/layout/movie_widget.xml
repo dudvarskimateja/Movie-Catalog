@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/widget_background">
 
     <ImageView
         android:id="@+id/moviePosterImageView"
@@ -19,19 +20,27 @@
             android:id="@+id/movieTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:padding="4dp"
             android:text="Movie Title" />
 
         <TextView
             android:id="@+id/movieOverviewTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:text="Movie Overview" />
 
         <TextView
             android:id="@+id/movieReleaseDateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:text="Movie Release Date" />
+
+
 
     </LinearLayout>
 
