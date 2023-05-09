@@ -13,6 +13,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="movie_details">Movie Details</string>
     <string name="app_widget_description">This is an app widget description</string>
     <string name="large_text"></string>
     <!-- TODO: Remove or change this placeholder text -->

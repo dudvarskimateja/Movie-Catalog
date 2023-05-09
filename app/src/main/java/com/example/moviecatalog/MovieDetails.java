@@ -2,9 +2,13 @@ package com.example.moviecatalog;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MovieDetails extends AppCompatActivity {
 
@@ -41,6 +46,15 @@ public class MovieDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_detail);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Movie Details");
+        }
+
+
+
+        // Find all the TextViews in the UI
         movieTitleTextView = findViewById(R.id.movieTitleTextView);
         budgetTextView = findViewById(R.id.budgetTextView);
         genresTextView = findViewById(R.id.genresTextView);
@@ -54,53 +68,61 @@ public class MovieDetails extends AppCompatActivity {
         statusTextView = findViewById(R.id.statusTextView);
         taglineTextView = findViewById(R.id.taglineTextView);
 
-        // Get the movie ID from the intent extra
-        int movieId = getIntent().getIntExtra("MOVIE_ID", -1);
+        // Get the movie object from the intent extra
+        Movie currentMovie = (Movie) getIntent().getSerializableExtra("movie");
 
-        if (movieId != -1) {
-            // Make a Volley request to get the movie details by ID
-            RequestQueue queue = Volley.newRequestQueue(this);
-            String url = "https://app-vpigadas.herokuapp.com/api/movies/demo/" + movieId + "/";
+        // Make a Volley request to get the movie details by ID
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://app-vpigadas.herokuapp.com/api/movies/demo/" + currentMovie.getId() + "/";
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                // Set the movie details in the UI
-                                movieTitleTextView.setText(response.getString("title"));
-                                budgetTextView.setText(String.valueOf(response.getInt("budget")));
-                                genresTextView.setText(response.getJSONArray("genres").toString());
-                                homepageTextView.setText(response.getString("homepage"));
-                                originalLanguageTextView.setText(response.getString("original_language"));
-                                productionCompaniesTextView.setText(response.getJSONArray("production_companies").toString());
-                                productionCountriesTextView.setText(response.getJSONArray("production_countries").toString());
-                                revenueTextView.setText(String.valueOf(response.getInt("revenue")));
-                                runtimeTextView.setText(String.valueOf(response.getInt("runtime")));
-                                spokenLanguagesTextView.setText(response.getJSONArray("spoken_languages").toString());
-                                statusTextView.setText(response.getString("status"));
-                                taglineTextView.setText(response.getString("tagline"));
-                            } catch (JSONException e) {
-                                Log.e("MovieDetailActivity", "Error parsing JSON response", e);
-                            }
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Set the movie details in the UI
+                            movieTitleTextView.setText(response.getString("title"));
+                            budgetTextView.setText(String.valueOf(response.getInt("budget")));
+                            genresTextView.setText(response.getJSONArray("genres").toString());
+                            homepageTextView.setText(response.getString("homepage"));
+                            originalLanguageTextView.setText(response.getString("original_language"));
+                            productionCompaniesTextView.setText(response.getJSONArray("production_companies").toString());
+                            productionCountriesTextView.setText(response.getJSONArray("production_countries").toString());
+                            revenueTextView.setText(String.valueOf(response.getInt("revenue")));
+                            runtimeTextView.setText(String.valueOf(response.getInt("runtime")));
+                            spokenLanguagesTextView.setText(response.getJSONArray("spoken_languages").toString());
+                            statusTextView.setText(response.getString("status"));
+                            taglineTextView.setText(response.getString("tagline"));
+                        } catch (JSONException e) {
+                            Log.e("MovieDetailActivity", "Error parsing JSON response", e);
                         }
-                    }, new Response.ErrorListener() {
+                    }
+                }, new Response.ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("MovieDetailActivity", "Error fetching movie data", error);
-                        }
-                    }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json");
-                    return headers;
-                }
-            };
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("MovieDetailActivity", "Error fetching movie data", error);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
 
-            queue.add(jsonObjectRequest);
+        queue.add(jsonObjectRequest);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
+

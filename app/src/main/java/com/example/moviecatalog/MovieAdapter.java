@@ -1,5 +1,7 @@
 package com.example.moviecatalog;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,11 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private List<Movie> mMovies;
+    private Context mContext;
 
-
-    public MovieAdapter(MainActivity mainActivity, List<Movie> movies) {
+    public MovieAdapter(Context context, List<Movie> movies) {
         mMovies = movies;
+        mContext = context;
     }
 
     @NonNull
@@ -27,7 +30,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_widget, parent, false);
-        return new MovieViewHolder(itemView);
+        final MovieViewHolder viewHolder = new MovieViewHolder(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = viewHolder.getAdapterPosition();
+                Movie currentMovie = mMovies.get(position);
+                Intent intent = new Intent(mContext, MovieDetails.class);
+                intent.putExtra("movie", currentMovie); // pass the actual Movie object
+                mContext.startActivity(intent);
+            }
+        });
+
+        return viewHolder;
     }
 
     @Override
@@ -59,5 +74,3 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 }
-
-

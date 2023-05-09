@@ -24,10 +24,10 @@ public class ScrollingActivity extends AppCompatActivity {
         com.example.moviecatalog.databinding.ActivityScrollingBinding binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Toolbar toolbar = binding.toolbar;
-        setSupportActionBar(toolbar);
-        CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
-        toolBarLayout.setTitle(getTitle());
+//        Toolbar toolbar = binding.toolbar;
+//        setSupportActionBar(toolbar);
+//        CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
+//        toolBarLayout.setTitle(getTitle());
 
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(new View.OnClickListener() {
