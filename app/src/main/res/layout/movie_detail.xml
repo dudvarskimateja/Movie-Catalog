@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,34 +23,36 @@
             <ImageView
                 android:id="@+id/moviePosterImageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:maxWidth="50dp"
-                android:src="@drawable/placeholder" />
+                android:src="@drawable/placeholder"
+                android:contentDescription="Movie Poster" />
 
             <TextView
                 android:id="@+id/movieTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="24sp"
+                android:padding="8dp"
+                android:textSize="30sp"
+                android:textAlignment="center"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/taglineTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="4dp"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/movieOverviewTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="18sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/movieOverviewTextView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="16dp"-->
+<!--                android:textSize="18sp" />-->
 
             <TextView
                 android:id="@+id/genresTextView"
@@ -67,12 +68,12 @@
                 android:padding="16dp"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/releaseDateTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="18sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/releaseDateTextView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="16dp"-->
+<!--                android:textSize="18sp" />-->
 
             <TextView
                 android:id="@+id/budgetTextView"
@@ -90,11 +91,13 @@
 
 
             <TextView
-            android:id="@+id/homepageTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textSize="18sp" />
+                android:id="@+id/homepageTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="18sp"
+                android:autoLink="web"
+                android:text="@+id/homepageTextView" />
 
         <TextView
             android:id="@+id/productionCompaniesTextView"

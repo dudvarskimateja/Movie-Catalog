@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,6 +69,8 @@ public class MovieDetails extends AppCompatActivity {
         statusTextView = findViewById(R.id.statusTextView);
         taglineTextView = findViewById(R.id.taglineTextView);
 
+
+
         // Get the movie object from the intent extra
         Movie currentMovie = (Movie) getIntent().getSerializableExtra("movie");
 
@@ -83,16 +86,44 @@ public class MovieDetails extends AppCompatActivity {
                         try {
                             // Set the movie details in the UI
                             movieTitleTextView.setText(response.getString("title"));
-                            budgetTextView.setText(String.valueOf(response.getInt("budget")));
-                            genresTextView.setText(response.getJSONArray("genres").toString());
+                            budgetTextView.setText("Budget: $" + String.valueOf(response.getInt("budget")));
+                            //genres
+                            JSONArray genresArray = response.getJSONArray("genres");
+                            String genres = "";
+
+                            for (int i = 0; i < genresArray.length(); i++) {
+                                JSONObject genreObject = genresArray.getJSONObject(i);
+                                String genreName = genreObject.getString("name");
+                                genres += genreName + ", ";
+                            }
+
+                            // Remove the trailing comma and space
+                            if (!genres.isEmpty()) {
+                                genres = genres.substring(0, genres.length() - 2);
+                            }
+
+                            genresTextView.setText("Genres: " + genres);
                             homepageTextView.setText(response.getString("homepage"));
                             originalLanguageTextView.setText(response.getString("original_language"));
                             productionCompaniesTextView.setText(response.getJSONArray("production_companies").toString());
-                            productionCountriesTextView.setText(response.getJSONArray("production_countries").toString());
-                            revenueTextView.setText(String.valueOf(response.getInt("revenue")));
-                            runtimeTextView.setText(String.valueOf(response.getInt("runtime")));
+
+                            //production countries
+                            JSONArray countriesArray = response.getJSONArray("production_countries");
+                            StringBuilder countriesString = new StringBuilder();
+                            for (int i = 0; i < countriesArray.length(); i++) {
+                                JSONObject countryObj = countriesArray.getJSONObject(i);
+                                String countryName = countryObj.getString("name");
+                                countriesString.append(countryName);
+                                if (i < countriesArray.length() - 1) {
+                                    countriesString.append("\n");
+                                }
+                            }
+                            productionCountriesTextView.setText("Production Countries: \n" + countriesString.toString());
+
+                            revenueTextView.setText("Revenue: $" + String.valueOf(response.getInt("revenue")));
+                            runtimeTextView.setText("Runtime: " + String.valueOf(response.getInt("runtime")) + "min");
                             spokenLanguagesTextView.setText(response.getJSONArray("spoken_languages").toString());
-                            statusTextView.setText(response.getString("status"));
+                            statusTextView.setText("Status: " + response.getString("status"));
                             taglineTextView.setText(response.getString("tagline"));
                         } catch (JSONException e) {
                             Log.e("MovieDetailActivity", "Error parsing JSON response", e);
