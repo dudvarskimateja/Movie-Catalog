@@ -23,24 +23,32 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/black"
+            android:fontFamily="sans-serif-black"
             android:textSize="20dp"
             android:padding="4dp"
             android:text="Movie Title" />
 
         <TextView
             android:id="@+id/movieOverviewTextView"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
             android:padding="8dp"
-            android:text="Movie Overview" />
+            android:text="Movie Overview"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/add_favorite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:insetLeft="6dp" />
 
         <TextView
             android:id="@+id/movieReleaseDateTextView"
-            android:layout_width="match_parent"
+            android:layout_width="183dp"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Movie Release Date" />
-
 
 
     </LinearLayout>

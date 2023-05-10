@@ -1,7 +1,12 @@
 package com.example.moviecatalog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +19,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +42,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setTitle("Movie Maven");
+
+        // bottom navigation
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_home:
+                    Intent homeIntent = new Intent(this, MainActivity.class);
+                    startActivity(homeIntent);
+                    return true;
+                case R.id.action_favorite:
+                    Intent favoritesIntent = new Intent(this, FavoritesActivity.class);
+                    startActivity(favoritesIntent);
+                    return true;
+                default:
+                    return false;
+            }
+        });
+
+//        Button addFavoriteButton = findViewById(R.id.add_favorite_button);
+//        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Get the selected movie
+//                Movie selectedMovie = null;// get the selected movie from the main activit
+//                        Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+//                // Add the selected movie to the intent
+//                intent.putExtra("selectedMovie", selectedMovie);
+//                // Start the FavoritesActivity
+//                startActivity(intent);
+//            }
+//        });
+
+
 
         movieRecyclerView = findViewById(R.id.recycler_view);
         movieAdapter = new MovieAdapter(this, movieList);
@@ -89,8 +132,26 @@ public class MainActivity extends AppCompatActivity {
                 return headers;
             }
         };
-
         queue.add(jsonObjectRequest);
-
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bottom_navigation_menu, menu);
+        ArrayList<Movie> favoritesList = new ArrayList<>();
+        MenuItem favoritesMenuItem = menu.findItem(R.id.action_favorite);
+        favoritesMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent favoritesIntent = new Intent(MainActivity.this, FavoritesActivity.class);
+                favoritesIntent.putExtra("favoritesList", favoritesList);
+                startActivity(favoritesIntent);
+                return true;
+            }
+        });
+
+        return true;
+    }
+
+
+
 }

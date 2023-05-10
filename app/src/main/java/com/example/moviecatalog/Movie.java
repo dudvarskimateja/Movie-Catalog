@@ -2,6 +2,8 @@ package com.example.moviecatalog;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movie implements Serializable {
 
@@ -87,5 +89,23 @@ public class Movie implements Serializable {
 
     public void setPoster(String poster) {
         this.poster = poster;
+    }
+
+    private static List<Movie> favoriteMovies = new ArrayList<>();
+
+    public static List<Movie> getFavoriteMovies() {
+        return favoriteMovies;
+    }
+
+    public static void addToFavorites(Movie movie) {
+        favoriteMovies.add(movie);
+    }
+
+    public static void removeFromFavorites(Movie movie) {
+        favoriteMovies.remove(movie);
+    }
+
+    public static boolean isFavorite(Movie movie) {
+        return favoriteMovies.contains(movie);
     }
 }
