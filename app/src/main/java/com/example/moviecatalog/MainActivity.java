@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button addFavoriteButton = findViewById(R.id.add_favorite_button);
+//        Button addFavoriteButton = findViewById(R.id.add_favorite_button);
 //        addFavoriteButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
