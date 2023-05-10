@@ -75,13 +75,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("MainActivity", "Error parsing JSON response", e);
                         }
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("MainActivity", "Error fetching movie data", error);
-                    }
-                }) {
+                }, error -> Log.e("MainActivity", "Error fetching movie data", error)) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
