@@ -1,10 +1,14 @@
 package com.example.moviecatalog;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Entity
 public class Movie implements Serializable {
-
+@PrimaryKey(autoGenerate = true)
     private int id;
     private String title;
     private String overview;
