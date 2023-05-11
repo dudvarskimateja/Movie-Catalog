@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AndroidThreeTen.init(this);
+
+
+        final MovieDatabase db = Room.databaseBuilder(getApplicationContext(),
+                MovieDatabase.class, "movie").build();
+
+        MovieDao movieDao = db.movieDao();
+        List<Movie> movie = movieDao.getAll();
+
 
         movieRecyclerView = findViewById(R.id.recycler_view);
         movieAdapter = new MovieAdapter(this, movieList);
@@ -58,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
                                 String title = movieObj.getString("title");
                                 String overview = movieObj.getString("overview");
                                 LocalDate releaseDate = null;
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                    releaseDate = LocalDate.parse(movieObj.getString("release_date"));
-                                }
+
+                                releaseDate = LocalDate.parse(movieObj.getString("release_date"));
+
                                 String poster = movieObj.getString("poster_path");
                                 double popularity = movieObj.getDouble("popularity");
                                 int voteCount = movieObj.getInt("vote_count");

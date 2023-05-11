@@ -2,6 +2,7 @@ package com.example.moviecatalog;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class Movie implements Serializable {
     private Double popularity;
     private int voteCount;
     private Double voteAverage;
+
     private LocalDate releaseDate;
     private String poster;
 

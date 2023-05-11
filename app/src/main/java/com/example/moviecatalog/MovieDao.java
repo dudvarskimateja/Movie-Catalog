@@ -12,8 +12,6 @@ public interface MovieDao {
     @Query("SELECT * FROM movie")
     List<Movie> getAll();
 
-    Movie findByName(String title);
-
     @Insert
     void insertAll(Movie... movies);
 
