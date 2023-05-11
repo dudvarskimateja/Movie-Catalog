@@ -43,8 +43,24 @@ public class MainActivity extends AppCompatActivity {
         final MovieDatabase db = Room.databaseBuilder(getApplicationContext(),
                 MovieDatabase.class, "movie").build();
 
-        MovieDao movieDao = db.movieDao();
-        List<Movie> movie = movieDao.getAll();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MovieDao movieDao = db.movieDao();
+                List<Movie> movie = movieDao.getAll();
+
+                // Update UI with the data retrieved from the database
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        movieList.addAll(movie);
+                        movieAdapter.notifyDataSetChanged(); // add this line
+                    }
+                });
+            }
+        }).start();
+
+
 
 
         movieRecyclerView = findViewById(R.id.recycler_view);
@@ -81,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 movieList.add(movie);
                                 movieAdapter.notifyDataSetChanged();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        db.movieDao().insert(movie);
+                                    }
+                                }).start();
                             }
                         } catch (JSONException e) {
                             Log.e("MainActivity", "Error parsing JSON response", e);
