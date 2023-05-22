@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -17,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ import java.util.Objects;
 
 public class MovieDetails extends AppCompatActivity {
 
+    private ImageView posterImageView;
     private TextView movieTitleTextView;
     private TextView budgetTextView;
     private TextView genresTextView;
@@ -40,6 +43,7 @@ public class MovieDetails extends AppCompatActivity {
     private TextView originalLanguageTextView;
     private TextView statusTextView;
     private TextView taglineTextView;
+    private ImageView logoImageView;
 
 
     @Override
@@ -56,6 +60,7 @@ public class MovieDetails extends AppCompatActivity {
 
 
         // Find all the TextViews in the UI
+        posterImageView = findViewById(R.id.moviePosterImageView);
         movieTitleTextView = findViewById(R.id.movieTitleTextView);
         budgetTextView = findViewById(R.id.budgetTextView);
         genresTextView = findViewById(R.id.genresTextView);
@@ -68,6 +73,7 @@ public class MovieDetails extends AppCompatActivity {
         originalLanguageTextView = findViewById(R.id.originalLanguageTextView);
         statusTextView = findViewById(R.id.statusTextView);
         taglineTextView = findViewById(R.id.taglineTextView);
+        logoImageView = findViewById(R.id.logoImageView);
 
 
 
@@ -76,7 +82,7 @@ public class MovieDetails extends AppCompatActivity {
 
         // Make a Volley request to get the movie details by ID
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://app-vpigadas.herokuapp.com/api/movies/demo/" + currentMovie.getId() + "/";
+        String url = "https://app-vpigadas.herokuapp.com/api/movies/" + currentMovie.getId() + "/";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -85,6 +91,8 @@ public class MovieDetails extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             // Set the movie details in the UI
+                            String posterPath = response.getString("backdrop_path");
+                            Picasso.get().load(posterPath).into(posterImageView);
                             movieTitleTextView.setText(response.getString("title"));
                             budgetTextView.setText("Budget: $" + String.valueOf(response.getInt("budget")));
                             //genres
@@ -105,7 +113,26 @@ public class MovieDetails extends AppCompatActivity {
                             genresTextView.setText("Genres: " + genres);
                             homepageTextView.setText(response.getString("homepage"));
                             originalLanguageTextView.setText(response.getString("original_language"));
-                            productionCompaniesTextView.setText(response.getJSONArray("production_companies").toString());
+
+                            JSONArray productionCompaniesArray = response.getJSONArray("production_companies");
+                            StringBuilder productionCompaniesString = new StringBuilder();
+
+                            for (int i = 0; i < productionCompaniesArray.length(); i++) {
+                                JSONObject companyObject = productionCompaniesArray.getJSONObject(i);
+                                String companyName = companyObject.getString("name");
+                                productionCompaniesString.append(companyName);
+
+                                if (i < productionCompaniesArray.length() - 1) {
+                                    productionCompaniesString.append(", ");
+                                }
+
+                                if (companyObject.has("logo_path")) {
+                                    String logoPath = companyObject.getString("logo_path");
+                                    Picasso.get().load(logoPath).into(logoImageView);
+                                }
+                            }
+
+                            productionCompaniesTextView.setText("Production Companies: " + productionCompaniesString.toString());
 
                             //production countries
                             JSONArray countriesArray = response.getJSONArray("production_countries");
@@ -122,7 +149,7 @@ public class MovieDetails extends AppCompatActivity {
 
                             revenueTextView.setText("Revenue: $" + String.valueOf(response.getInt("revenue")));
                             runtimeTextView.setText("Runtime: " + String.valueOf(response.getInt("runtime")) + "min");
-                            spokenLanguagesTextView.setText(response.getJSONArray("spoken_languages").toString());
+                            //spokenLanguagesTextView.setText(response.getJSONArray("spoken_languages").toString());
                             statusTextView.setText("Status: " + response.getString("status"));
                             taglineTextView.setText(response.getString("tagline"));
                         } catch (JSONException e) {

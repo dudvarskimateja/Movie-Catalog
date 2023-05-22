@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void onClick(View v) {
 //                // Get the selected movie
-//                Movie selectedMovie = null;// get the selected movie from the main activit
+//                Movie selectedMovie = null;// get the selected movie from the main activity
 //                        Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
 //                // Add the selected movie to the intent
 //                intent.putExtra("selectedMovie", selectedMovie);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         movieRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://app-vpigadas.herokuapp.com/api/movies/demo/";
+        String url = "https://app-vpigadas.herokuapp.com/api/movies/";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
