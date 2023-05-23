@@ -65,7 +65,7 @@ public class MovieDetails extends AppCompatActivity {
         budgetTextView = findViewById(R.id.budgetTextView);
         genresTextView = findViewById(R.id.genresTextView);
         homepageTextView = findViewById(R.id.homepageTextView);
-        spokenLanguagesTextView = findViewById(R.id.spokenLanguagesTextView);
+        //spokenLanguagesTextView = findViewById(R.id.spokenLanguagesTextView);
         productionCompaniesTextView = findViewById(R.id.productionCompaniesTextView);
         productionCountriesTextView = findViewById(R.id.productionCountriesTextView);
         revenueTextView = findViewById(R.id.revenueTextView);

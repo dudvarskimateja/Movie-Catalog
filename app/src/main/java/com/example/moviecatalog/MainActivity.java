@@ -11,6 +11,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Movie> movieList = new ArrayList<>();
     private RecyclerView movieRecyclerView;
     private MovieAdapter movieAdapter;
+    private MovieDao movieDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setTitle("Movie Maven");
+
+        //movie database initialization
+        MovieDatabase movieDatabase = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, "movie-db").build();
+        movieDao = movieDatabase.movieDao();
 
         // bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
@@ -111,9 +117,37 @@ public class MainActivity extends AppCompatActivity {
 
                                 Movie movie = new Movie(id, title, overview, popularity, voteCount, voteAverage, releaseDate, poster);
 
+                                // Insert the movie into the database
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Movie existingMovie = movieDao.getMovieById(movie.getId());
+                                        if (existingMovie == null) {
+                                            movieDao.insertMovie(movie);
+                                        }
+                                    }
+                                }).start();
+
+                                // Add the movie to the list
                                 movieList.add(movie);
-                                movieAdapter.notifyDataSetChanged();
                             }
+
+                            // Retrieve movies from the database
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    List<Movie> movies = movieDao.getAllMovies();
+                                    movieList.addAll(movies);
+
+                                    // Notify the adapter that the data has changed
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            movieAdapter.notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                            }).start();
                         } catch (JSONException e) {
                             Log.e("MainActivity", "Error parsing JSON response", e);
                         }
@@ -123,6 +157,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("MainActivity", "Error fetching movie data", error);
+                        setTitle("Movie Maven (Offline Mode)");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                List<Movie> movies = movieDao.getAllMovies();
+                                movieList.addAll(movies);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        movieAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        }).start();
+
+
                     }
                 }) {
             @Override
